@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<device schemaVersion="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:noNamespaceSchemaLocation="CMSIS-SVD_Schema_1_0.xsd" >
+  <name>Nimitz</name>                                           <!-- name of part or part series -->
+  <version>1.0</version>                                          <!-- version of this description -->
+  <description>ARM 32-bit Cortex-M4 Microcontroller</description>
+  <addressUnitBits>8</addressUnitBits>                            <!-- byte addressable memory -->
+  <width>32</width>                                               <!-- bus width is 32 bits -->
+  <!-- default settings implicitly inherited by subsequent sections -->
+  <size>32</size>                                                 <!-- this is the default size (number of bits) of all peripherals
+                                                                       and register that do not define "size" themselves -->
+  <access>read-write</access>                                     <!-- default access permission for all subsequent registers -->
+  <resetValue>0x00000000</resetValue>                             <!-- by default all bits of the registers are initialized to 0 on reset -->
+  <resetMask>0xFFFFFFFF</resetMask>                               <!-- by default all 32Bits of the registers are used -->
+
+<peripherals>
+
+<!-- SPIX:SPIX -->
+
+<peripheral>
+   <name>SPIX</name>
+   <description>SPI XIP Interface</description>
+   <baseAddress>0x40004000</baseAddress>
+   <groupName>SPIX</groupName>
+   <size>32</size>
+   <access>read-write</access>
+
+   <addressBlock>
+      <offset>0</offset>
+      <size>0x1000</size>
+      <usage>registers</usage>
+   </addressBlock>
+
+   <registers>
+
+   <!-- MASTER_CFG: SPIX Master Configuration -->
+      <register>
+         <name>MASTER_CFG</name>
+         <description>SPIX Master Configuration</description>
+         <addressOffset>0x0000</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>spi_mode</name>
+               <description>SPIX Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>ss_polarity</name>
+               <description>SPIX Slave Select Polarity</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>alt_timing_en</name>
+               <description>Alternate Timing Mode Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:3]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>slave_sel</name>
+               <description>SPIX Slave Select</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[6:4]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>sck_hi_clk</name>
+               <description>SCK High Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[11:8]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>sck_lo_clk</name>
+               <description>SCK Low Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[15:12]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>act_delay</name>
+               <description>SS Active Timing</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[17:16]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>inact_delay</name>
+               <description>SS Inactive Timing</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[19:18]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>alt_sck_hi_clk</name>
+               <description>Alt SCK High Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[23:20]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>alt_sck_lo_clk</name>
+               <description>Alt SCK Low Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[27:24]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- FETCH_CTRL: SPIX Fetch Control -->
+      <register>
+         <name>FETCH_CTRL</name>
+         <description>SPIX Fetch Control</description>
+         <addressOffset>0x0004</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>cmd_value</name>
+               <description>Command Value</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[7:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>cmd_width</name>
+               <description>Command Width</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[9:8]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>addr_width</name>
+               <description>Address Width</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[11:10]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>data_width</name>
+               <description>Data Width</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[13:12]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- MODE_CTRL: SPIX Mode Control -->
+      <register>
+         <name>MODE_CTRL</name>
+         <description>SPIX Mode Control</description>
+         <addressOffset>0x0008</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>mode_clocks</name>
+               <description>Mode Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>no_cmd_mode</name>
+               <description>No Command Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[8:8]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- MODE_DATA: SPIX Mode Data -->
+      <register>
+         <name>MODE_DATA</name>
+         <description>SPIX Mode Data</description>
+         <addressOffset>0x000C</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>mode_data_bits</name>
+               <description>Mode Data</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[15:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>mode_data_oe</name>
+               <description>Mode Output Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[31:16]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   </registers>
+</peripheral>
+
+
+<!-- SPIB:SPIB -->
+
+<peripheral>
+   <name>SPIB</name>
+   <description>SPIB AHB-to-SPI Bridge</description>
+   <baseAddress>0x4000D000</baseAddress>
+   <groupName>SPIB</groupName>
+   <size>32</size>
+   <access>read-write</access>
+
+   <addressBlock>
+      <offset>0</offset>
+      <size>0x1000</size>
+      <usage>registers</usage>
+   </addressBlock>
+
+   <registers>
+
+   <!-- MASTER_CFG: SPIB Master Configuration -->
+      <register>
+         <name>MASTER_CFG</name>
+         <description>SPIB Master Configuration</description>
+         <addressOffset>0x0000</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>spi_mode</name>
+               <description>SPIB Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>spi_width</name>
+               <description>SPIB Width</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>sck_hi_clk</name>
+               <description>SCK High Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[11:8]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>sck_lo_clk</name>
+               <description>SCK Low Clocks</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[15:12]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>act_delay</name>
+               <description>SS Active Timing</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[17:16]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>inact_delay</name>
+               <description>SS Inactive Timing</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[19:18]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- OOB_CTRL: SPIB OOB Control -->
+      <register>
+         <name>OOB_CTRL</name>
+         <description>SPIB OOB Control</description>
+         <addressOffset>0x0004</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>monitor_slave_int0</name>
+               <description>Slave System Int Monitor Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>monitor_slave_int1</name>
+               <description>Slave System Rst Monitor Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>monitor_slave_int2</name>
+               <description>Slave Bad AHB Response Monitor Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- INTFL: SPIB Interrupt Flags -->
+      <register>
+         <name>INTFL</name>
+         <description>SPIB Interrupt Flags</description>
+         <addressOffset>0x0008</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>slave_int0_sys_int</name>
+               <description>Slave System Int Detected</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>slave_int1_sys_rst</name>
+               <description>Slave System Reset Detected</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>slave_int2_bad_ahb_resp</name>
+               <description>Slave Bad AHB Response Detected</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+         </fields>
+      </register>
+
+   <!-- INTEN: SPIB Interrupt Enables -->
+      <register>
+         <name>INTEN</name>
+         <description>SPIB Interrupt Enables</description>
+         <addressOffset>0x000C</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>slave_int0_sys_int</name>
+               <description>Slave System Int Detected Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>slave_int1_sys_rst</name>
+               <description>Slave System Reset Detected Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>slave_int2_bad_ahb_resp</name>
+               <description>Slave Bad AHB Response Detected Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- SLAVE_REG: SPIB Slave Register Access -->
+      <register>
+         <name>SLAVE_REG</name>
+         <description>SPIB Slave Register Access</description>
+         <addressOffset>0x0010</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>enable_slave_reg_access</name>
+               <description>SPIB Slave Register Access Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>start_access_cycle</name>
+               <description>Start SPIB Slave Register Access Cycle</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>access_type</name>
+               <description>SPIB Slave Register Access Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>slave_reg_write_data</name>
+               <description>SPIB Slave Register Write Data</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[15:8]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>slave_reg_read_data</name>
+               <description>SPIB Slave Register Read Data</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[23:16]</bitRange>
+               <access>read-only</access>
+            </field>
+         </fields>
+      </register>
+
+   </registers>
+</peripheral>
+
+
+<!-- OWM:OWM -->
+
+<peripheral>
+   <name>OWM</name>
+   <description>1-Wire Master Interface</description>
+   <baseAddress>0x4000E000</baseAddress>
+   <groupName>OWM</groupName>
+   <size>32</size>
+   <access>read-write</access>
+
+   <addressBlock>
+      <offset>0</offset>
+      <size>0x1000</size>
+      <usage>registers</usage>
+   </addressBlock>
+
+   <registers>
+
+   <!-- CFG: 1-Wire Master Configuration -->
+      <register>
+         <name>CFG</name>
+         <description>1-Wire Master Configuration</description>
+         <addressOffset>0x0000</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>long_line_mode</name>
+               <description>Long Line Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>force_pres_det</name>
+               <description>Force Line During Presence Detect</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>bit_bang_en</name>
+               <description>Bit Bang Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>ext_pullup_mode</name>
+               <description>Provide an extra output to control an external pullup.</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:3]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>ext_pullup_enable</name>
+               <description>Enable External Pullup</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[4:4]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>single_bit_mode</name>
+               <description>Enable Single Bit TX/RX Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[5:5]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>overdrive</name>
+               <description>Enables overdrive speed for 1-Wire operations.</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[6:6]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>int_pullup_enable</name>
+               <description>Enable internal pullup.</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[7:7]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- CLK_DIV_1US: 1-Wire Master Clock Divisor -->
+      <register>
+         <name>CLK_DIV_1US</name>
+         <description>1-Wire Master Clock Divisor</description>
+         <addressOffset>0x0004</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>divisor</name>
+               <description>Clock Divisor for 1MHz</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[7:0]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- CTRL_STAT: 1-Wire Master Control/Status -->
+      <register>
+         <name>CTRL_STAT</name>
+         <description>1-Wire Master Control/Status</description>
+         <addressOffset>0x0008</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>start_ow_reset</name>
+               <description>Start OW Reset</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>sra_mode</name>
+               <description>SRA Mode</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>bit_bang_oe</name>
+               <description>Bit Bang Output Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>ow_input</name>
+               <description>OW Input State</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:3]</bitRange>
+               <access>read-only</access>
+            </field>
+            <field>
+               <name>presence_detect</name>
+               <description>Presence Pulse Detected</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[7:7]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- DATA: 1-Wire Master Data Buffer -->
+      <register>
+         <name>DATA</name>
+         <description>1-Wire Master Data Buffer</description>
+         <addressOffset>0x000C</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>tx_rx</name>
+               <description>Tx/Rx Buffer</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[7:0]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- INTFL: 1-Wire Master Interrupt Flags -->
+      <register>
+         <name>INTFL</name>
+         <description>1-Wire Master Interrupt Flags</description>
+         <addressOffset>0x0010</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>ow_reset_done</name>
+               <description>OW Reset Sequence Completed</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>tx_data_empty</name>
+               <description>Tx Data Empty Interrupt Flag</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>rx_data_ready</name>
+               <description>Rx Data Ready Interrupt Flag</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>line_short</name>
+               <description>OW Line Short Detected Interrupt Flag</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:3]</bitRange>
+               <access>read-write</access>
+            </field>
+            <field>
+               <name>line_low</name>
+               <description>OW Line Low Detected Interrupt Flag</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[4:4]</bitRange>
+               <access>read-write</access>
+            </field>
+         </fields>
+      </register>
+
+   <!-- INTEN: 1-Wire Master Interrupt Enables -->
+      <register>
+         <name>INTEN</name>
+         <description>1-Wire Master Interrupt Enables</description>
+         <addressOffset>0x0014</addressOffset>
+         <access>read-write</access>
+         <fields>
+            <field>
+               <name>ow_reset_done</name>
+               <description>OW Reset Sequence Completed</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[0:0]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>tx_data_empty</name>
+               <description>Tx Data Empty Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[1:1]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>rx_data_ready</name>
+               <description>Rx Data Ready Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[2:2]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>line_short</name>
+               <description>OW Line Short Detected Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[3:3]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+            <field>
+               <name>line_low</name>
+               <description>OW Line Low Detected Interrupt Enable</description>
+               <enumeratedValues></enumeratedValues>
+               <bitRange>[4:4]</bitRange>
+               <access>read-write</access>
+               <modifiedWriteValues>oneToClear</modifiedWriteValues>
+            </field>
+         </fields>
+      </register>
+
+   </registers>
+</peripheral>
+
+
+
+</peripherals>
+</device>
