@@ -1,5 +1,5 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
- ; Copyright (C) 2016 Maxim Integrated Products, Inc., All Rights Reserved.
+ ; Copyright (C) 2017 Maxim Integrated Products, Inc., All Rights Reserved.
  ;
  ; Permission is hereby granted, free of charge, to any person obtaining a
  ; copy of this software and associated documentation files (the "Software"),
@@ -44,7 +44,7 @@ Stack_Size      EQU     0x00000800
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size
-__initial_sp                                        ; KEIL: name is set to work with MicroLib
+__initial_sp                                        ; ARMCC: name is set to work with MicroLib
 
 ; <h> Heap Configuration
 ;   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
@@ -125,8 +125,8 @@ __Vectors       DCD     __initial_sp                ; Top of Stack
                 DCD     TMR16_5_IRQHandler          ; 49:33 Timer16-s5 
                 DCD     UART0_IRQHandler            ; 50:34 UART0 
                 DCD     UART1_IRQHandler            ; 51:35 UART1 
-                DCD     UART2_IRQHandler            ; 52:36 UART0 
-                DCD     UART3_IRQHandler            ; 53:37 UART1 
+                DCD     UART2_IRQHandler                ; 52:36 UART2
+                DCD     UART3_IRQHandler                ; 53:37 UART3
                 DCD     PT_IRQHandler               ; 54:38 PT 
                 DCD     I2CM0_IRQHandler            ; 55:39 I2C Master 0 
                 DCD     I2CM1_IRQHandler            ; 56:40 I2C Master 1 
@@ -149,9 +149,10 @@ __Vectors_Size  EQU     __Vectors_End - __Vectors
 
 Reset_Handler   PROC
                 EXPORT  Reset_Handler               [WEAK]
-                IMPORT  __main
-                IMPORT  SystemInit
                 IMPORT  PreInit
+                IMPORT  SystemInit
+                IMPORT  __main
+
                 LDR     R0, =PreInit
                 BLX     R0
                 LDR     R0, =SystemInit
@@ -192,7 +193,9 @@ UsageFault_Handler\
                 EXPORT  UsageFault_Handler          [WEAK]
                 B       .
                 ENDP
-SVC_Handler     PROC
+
+SVC_Handler\
+                PROC
                 EXPORT  SVC_Handler                 [WEAK]
                 B       .
                 ENDP
@@ -202,70 +205,74 @@ DebugMon_Handler\
                 EXPORT  DebugMon_Handler            [WEAK]
                 B       .
                 ENDP
-PendSV_Handler  PROC
+
+PendSV_Handler\
+                PROC
                 EXPORT  PendSV_Handler              [WEAK]
                 B       .
                 ENDP
-SysTick_Handler PROC
+
+SysTick_Handler\
+                PROC
                 EXPORT  SysTick_Handler             [WEAK]
                 B       .
                 ENDP
 
-Default_Handler PROC
-
+Default_Handler\
+                PROC
                 ; MAX32620 Interrupts
-                EXPORT  CLKMAN_IRQHandler           [WEAK] ; 16:01 CLKMAN
-                EXPORT  PWRMAN_IRQHandler           [WEAK] ; 17:02 PWRMAN
-                EXPORT  FLC_IRQHandler              [WEAK] ; 18:03 Flash Controller
-                EXPORT  RTC0_IRQHandler             [WEAK] ; 19:04 RTC INT0
-                EXPORT  RTC1_IRQHandler             [WEAK] ; 20:05 RTC INT1
-                EXPORT  RTC2_IRQHandler             [WEAK] ; 21:06 RTC INT2
-                EXPORT  RTC3_IRQHandler             [WEAK] ; 22:07 RTC INT3
-                EXPORT  PMU_IRQHandler              [WEAK] ; 23:08 PMU
-                EXPORT  USB_IRQHandler              [WEAK] ; 24:09 USB
-                EXPORT  AES_IRQHandler              [WEAK] ; 25:10 AES
-                EXPORT  MAA_IRQHandler              [WEAK] ; 26:11 MAA
-                EXPORT  WDT0_IRQHandler             [WEAK] ; 27:12 WATCHDOG0
-                EXPORT  WDT0_P_IRQHandler           [WEAK] ; 28:13 WATCHDOG0 PRE-WINDOW
-                EXPORT  WDT1_IRQHandler             [WEAK] ; 29:14 WATCHDOG1
-                EXPORT  WDT1_P_IRQHandler           [WEAK] ; 30:15 WATCHDOG1 PRE-WINDOW
-                EXPORT  GPIO_P0_IRQHandler          [WEAK] ; 31:16 GPIO Port 0 
-                EXPORT  GPIO_P1_IRQHandler          [WEAK] ; 32:17 GPIO Port 1 
-                EXPORT  GPIO_P2_IRQHandler          [WEAK] ; 33:18 GPIO Port 2 
-                EXPORT  GPIO_P3_IRQHandler          [WEAK] ; 34:19 GPIO Port 3 
-                EXPORT  GPIO_P4_IRQHandler          [WEAK] ; 35:20 GPIO Port 4 
-                EXPORT  GPIO_P5_IRQHandler          [WEAK] ; 36:21 GPIO Port 5 
-                EXPORT  GPIO_P6_IRQHandler          [WEAK] ; 37:22 GPIO Port 6 
-                EXPORT  TMR0_IRQHandler             [WEAK] ; 38:23 Timer32-0
-                EXPORT  TMR16_0_IRQHandler          [WEAK] ; 39:24 Timer16-s0
-                EXPORT  TMR1_IRQHandler             [WEAK] ; 40:25 Timer32-1
-                EXPORT  TMR16_1_IRQHandler          [WEAK] ; 41:26 Timer16-s1
-                EXPORT  TMR2_IRQHandler             [WEAK] ; 42:27 Timer32-2
-                EXPORT  TMR16_2_IRQHandler          [WEAK] ; 43:28 Timer16-s2
-                EXPORT  TMR3_IRQHandler             [WEAK] ; 44:29 Timer32-3
-                EXPORT  TMR16_3_IRQHandler          [WEAK] ; 45:30 Timer16-s3
-                EXPORT  TMR4_IRQHandler             [WEAK] ; 46:31 Timer32-4
-                EXPORT  TMR16_4_IRQHandler          [WEAK] ; 47:32 Timer16-s4
-                EXPORT  TMR5_IRQHandler             [WEAK] ; 48:33 Timer32-5
-                EXPORT  TMR16_5_IRQHandler          [WEAK] ; 49:34 Timer16-s5
-                EXPORT  UART0_IRQHandler            [WEAK] ; 51:35 UART0
-                EXPORT  UART1_IRQHandler            [WEAK] ; 52:36 UART1
-                EXPORT  UART2_IRQHandler            [WEAK] ; 53:37 UART2
-                EXPORT  UART3_IRQHandler            [WEAK] ; 54:38 UART3
-                EXPORT  PT_IRQHandler               [WEAK] ; 50:39 PT
-                EXPORT  I2CM0_IRQHandler            [WEAK] ; 55:40 I2C Master 0
-                EXPORT  I2CM1_IRQHandler            [WEAK] ; 56:41 I2C Master 1
-                EXPORT  I2CM2_IRQHandler            [WEAK] ; 57:42 I2C Master 2
-                EXPORT  I2CS_IRQHandler             [WEAK] ; 58:43 I2C Slave
-                EXPORT  SPIM0_IRQHandler            [WEAK] ; 59:44 SPIM0
-                EXPORT  SPIM1_IRQHandler            [WEAK] ; 60:45 SPIM1
-                EXPORT  SPIM2_IRQHandler            [WEAK] ; 61:46 SPIM2
-                EXPORT  SPIB_IRQHandler             [WEAK] ; 62:47 SPI Bridge
-                EXPORT  OWM_IRQHandler              [WEAK] ; 63:48 SPI Bridge
-                EXPORT  AFE_IRQHandler              [WEAK] ; 64:49 AFE
-                EXPORT  SPIS_IRQHandler             [WEAK] ; 65:50 SPI Slave 
-                EXPORT  GPIO_P7_IRQHandler          [WEAK] ; 66:51 GPIO Port 7
-                EXPORT  GPIO_P8_IRQHandler          [WEAK] ; 67:52 GPIO Port 8
+                EXPORT  CLKMAN_IRQHandler       [WEAK] ; 16:00 CLKMAN
+                EXPORT  PWRMAN_IRQHandler       [WEAK] ; 17:01 PWRMAN
+                EXPORT  FLC_IRQHandler          [WEAK] ; 18:02 Flash Controller
+                EXPORT  RTC0_IRQHandler         [WEAK] ; 19:03 RTC INT0
+                EXPORT  RTC1_IRQHandler         [WEAK] ; 20:04 RTC INT1
+                EXPORT  RTC2_IRQHandler         [WEAK] ; 21:05 RTC INT2
+                EXPORT  RTC3_IRQHandler         [WEAK] ; 22:06 RTC INT3
+                EXPORT  PMU_IRQHandler          [WEAK] ; 23:07 PMU
+                EXPORT  USB_IRQHandler          [WEAK] ; 24:08 USB
+                EXPORT  AES_IRQHandler          [WEAK] ; 25:09 AES
+                EXPORT  MAA_IRQHandler          [WEAK] ; 26:10 MAA
+                EXPORT  WDT0_IRQHandler         [WEAK] ; 27:11 WATCHDOG0
+                EXPORT  WDT0_P_IRQHandler       [WEAK] ; 28:12 WATCHDOG0 PRE-WINDOW
+                EXPORT  WDT1_IRQHandler         [WEAK] ; 29:13 WATCHDOG1
+                EXPORT  WDT1_P_IRQHandler       [WEAK] ; 30:14 WATCHDOG1 PRE-WINDOW
+                EXPORT  GPIO_P0_IRQHandler      [WEAK] ; 31:15 GPIO Port 0
+                EXPORT  GPIO_P1_IRQHandler      [WEAK] ; 32:16 GPIO Port 1
+                EXPORT  GPIO_P2_IRQHandler      [WEAK] ; 33:17 GPIO Port 2
+                EXPORT  GPIO_P3_IRQHandler      [WEAK] ; 34:18 GPIO Port 3
+                EXPORT  GPIO_P4_IRQHandler      [WEAK] ; 35:19 GPIO Port 4
+                EXPORT  GPIO_P5_IRQHandler      [WEAK] ; 36:20 GPIO Port 5
+                EXPORT  GPIO_P6_IRQHandler      [WEAK] ; 37:21 GPIO Port 6
+                EXPORT  TMR0_IRQHandler         [WEAK] ; 38:22 Timer32-0
+                EXPORT  TMR16_0_IRQHandler      [WEAK] ; 39:23 Timer16-s0
+                EXPORT  TMR1_IRQHandler         [WEAK] ; 40:24 Timer32-1
+                EXPORT  TMR16_1_IRQHandler      [WEAK] ; 41:25 Timer16-s1
+                EXPORT  TMR2_IRQHandler         [WEAK] ; 42:26 Timer32-2
+                EXPORT  TMR16_2_IRQHandler      [WEAK] ; 43:27 Timer16-s2
+                EXPORT  TMR3_IRQHandler         [WEAK] ; 44:28 Timer32-3
+                EXPORT  TMR16_3_IRQHandler      [WEAK] ; 45:29 Timer16-s3
+                EXPORT  TMR4_IRQHandler         [WEAK] ; 46:30 Timer32-4
+                EXPORT  TMR16_4_IRQHandler      [WEAK] ; 47:31 Timer16-s4
+                EXPORT  TMR5_IRQHandler         [WEAK] ; 48:32 Timer32-5
+                EXPORT  TMR16_5_IRQHandler      [WEAK] ; 49:33 Timer16-s5
+                EXPORT  UART0_IRQHandler        [WEAK] ; 50:34 UART0
+                EXPORT  UART1_IRQHandler        [WEAK] ; 51:35 UART1
+                EXPORT  UART2_IRQHandler        [WEAK] ; 52:36 UART2
+                EXPORT  UART3_IRQHandler        [WEAK] ; 53:37 UART3
+                EXPORT  PT_IRQHandler           [WEAK] ; 54:38 PT
+                EXPORT  I2CM0_IRQHandler        [WEAK] ; 55:39 I2C Master 0
+                EXPORT  I2CM1_IRQHandler        [WEAK] ; 56:40 I2C Master 1
+                EXPORT  I2CM2_IRQHandler        [WEAK] ; 57:41 I2C Master 2
+                EXPORT  I2CS_IRQHandler         [WEAK] ; 58:42 I2C Slave
+                EXPORT  SPIM0_IRQHandler        [WEAK] ; 59:43 SPIM0
+                EXPORT  SPIM1_IRQHandler        [WEAK] ; 60:44 SPIM1
+                EXPORT  SPIM2_IRQHandler        [WEAK] ; 61:45 SPIM2
+                EXPORT  SPIB_IRQHandler         [WEAK] ; 62:46 SPI Bridge
+                EXPORT  OWM_IRQHandler          [WEAK] ; 63:47 SPI Bridge
+                EXPORT  AFE_IRQHandler          [WEAK] ; 64:48 AFE
+                EXPORT  SPIS_IRQHandler         [WEAK] ; 65:49 SPI Slave
+                EXPORT  GPIO_P7_IRQHandler      [WEAK] ; 66:50 GPIO Port 7
+                EXPORT  GPIO_P8_IRQHandler      [WEAK] ; 67:51 GPIO Port 8
 
 CLKMAN_IRQHandler 
 PWRMAN_IRQHandler 

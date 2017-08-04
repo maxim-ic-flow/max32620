@@ -33,11 +33,10 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-10-10 19:51:14 -0500 (Mon, 10 Oct 2016) $
- * $Revision: 24676 $
+ * $Date: 2017-02-27 18:18:01 -0600 (Mon, 27 Feb 2017) $
+ * $Revision: 26714 $
  *
  **************************************************************************** */
-
 
 /* **** Includes **** */ 
 #include "mxc_config.h"
@@ -47,17 +46,16 @@
 /* Define to prevent redundant inclusion */
 #ifndef _UART_H_
 #define _UART_H_
-
+/**
+ * @ingroup periphlibs
+ * @defgroup uart_top UART API and Registers
+ * @{
+ */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**
- * @ingroup commperipherals
- * @defgroup uart_comm UART
- * @brief UART serial communications peripheral. 
- * @{
- */
+
 
 /* **** Definitions **** */
 
@@ -65,10 +63,10 @@ extern "C" {
  * Enumeration type for defining the number of bits per character. 
  */
 typedef enum {
-    UART_DATA_SIZE_5_BITS = MXC_V_UART_CTRL_DATA_SIZE_5_BITS,
-    UART_DATA_SIZE_6_BITS = MXC_V_UART_CTRL_DATA_SIZE_6_BITS,
-    UART_DATA_SIZE_7_BITS = MXC_V_UART_CTRL_DATA_SIZE_7_BITS,
-    UART_DATA_SIZE_8_BITS = MXC_V_UART_CTRL_DATA_SIZE_8_BITS
+    UART_DATA_SIZE_5_BITS = MXC_V_UART_CTRL_DATA_SIZE_5_BITS, /**< 5 Data bits per UART character. */
+    UART_DATA_SIZE_6_BITS = MXC_V_UART_CTRL_DATA_SIZE_6_BITS, /**< 6 Data bits per UART character. */
+    UART_DATA_SIZE_7_BITS = MXC_V_UART_CTRL_DATA_SIZE_7_BITS, /**< 7 Data bits per UART character. */
+    UART_DATA_SIZE_8_BITS = MXC_V_UART_CTRL_DATA_SIZE_8_BITS  /**< 8 Data bits per UART character. */
 }
 uart_data_size_t;
 
@@ -76,43 +74,44 @@ uart_data_size_t;
  * Enumeration type for selecting Parity and type. 
  */
 typedef enum {
-    UART_PARITY_DISABLE = MXC_V_UART_CTRL_PARITY_DISABLE,
-    UART_PARITY_ODD     = MXC_V_UART_CTRL_PARITY_ODD,
-    UART_PARITY_EVEN    = MXC_V_UART_CTRL_PARITY_EVEN,
-    UART_PARITY_MARK    = MXC_V_UART_CTRL_PARITY_MARK
+    UART_PARITY_DISABLE = MXC_V_UART_CTRL_PARITY_DISABLE,    /**< Parity disabled.  */
+    UART_PARITY_ODD     = MXC_V_UART_CTRL_PARITY_ODD,        /**< Odd parity.       */
+    UART_PARITY_EVEN    = MXC_V_UART_CTRL_PARITY_EVEN,       /**< Even parity.      */
+    UART_PARITY_MARK    = MXC_V_UART_CTRL_PARITY_MARK        /**< Mark parity.      */
 } uart_parity_t;
 
 /**
  * Configuration structure type for a UART port. 
  */
 typedef struct {
-    uint8_t extra_stop;             /**< Number of stop bits.
-                                     *   @li 0 for one stop bit
-                                     *   @li 1 for two stop bits
-                                     */
-    uint8_t cts;                    /**< CTS Enable/Disable.
-                                     *   @li 1 to enable CTS
-                                     *   @li 0 to disable CTS
-                                     */
-    uint8_t rts;                    /**< RTS Enable/Disable.
-                                     *   @li 1 to enable RTS
-                                     *   @li 0 to disable RTS
-                                     */
+    uint8_t extra_stop;             /**< @c 0 for one stop bit, @c 1 for two stop bits*/
+    uint8_t cts;                    /**< CTS Enable/Disable, @c 1 to enable CTS, @c 0 to disable CTS.*/
+    uint8_t rts;                    /**< @c 1 to enable RTS, @c 0 to disable RTS. */
     uint32_t baud;                  /**< Baud rate in Hz.                                               */
-    uart_data_size_t size;          /**< Set the number of bits per character, see #uart_data_size_t.   */
-    uart_parity_t parity;           /**< Set the parity, see #uart_parity_t for supported parity types. */
+    uart_data_size_t size;          /**< Set the number of bits per character, see uart_data_size_t.   */
+    uart_parity_t parity;           /**< Set the parity, see uart_parity_t for supported parity types. */
 } uart_cfg_t;
-
+/** @} */
+/**
+ * @ingroup uart_top
+ * @defgroup uart_async UART Asynchronous Functions
+ * @{
+ */
+  
 /**
  * Structure type for a UART asynchronous transaction request.
  */
 typedef struct uart_req uart_req_t;
 
 /**
- * @brief   Type alias \c uart_async_callback for a callback function with signature of: \code void callback)(uart_req_t* , int error_code) \endcode
- * @param   uart_req_t*     Pointer to the transaction request.
- * @param   error_code      Return code for the UART request. @see mxc_errors.h.
- * @addtogroup uart_async
+ * @brief   Type alias for a UART callback function used for asynchronous operations. 
+ * @details  
+ * Type alias \c uart_async_callback for a callback function with signature of: 
+ * @code{.c}
+ *    void callback_fn(uart_req_t *request , int error_code);
+ * @endcode
+ * @p uart_req_t *    Pointer to the transaction request.
+ * @p error_code      Return code for the UART request. See @ref MXC_Error_Codes for possible codes. 
  */
 typedef void (*uart_async_callback)(uart_req_t*, int); 
 
@@ -120,20 +119,22 @@ typedef void (*uart_async_callback)(uart_req_t*, int);
  * Structure for a UART asynchronous transaction request.
  * @note       When using this structure for an asynchronous operation, the
  *             structure must remain allocated until the callback is completed.
- * @addtogroup uart_async
  */
 struct uart_req {
-    uint8_t *data;                  /**< Data buffer for characters.                                              */
-    unsigned len;                   /**< Length of characters in data to send or receive.                         */
-    unsigned num;                   /**< Number of characters actually sent or received.                          */
-    uart_async_callback callback;   /**< Pointer to a callback function of type uart_async_callback(). */
+    uint8_t *data;                  /**< Data buffer for characters.                                    */
+    unsigned len;                   /**< Length of characters in data to send or receive.               */
+    unsigned num;                   /**< Number of characters actually sent or received.                */
+    uart_async_callback callback;   /**< Pointer to a callback function of type uart_async_callback()   */
 };
 
-
+/** @} */ 
 /* **** Globals **** */
 
 /* **** Function Prototypes **** */
-
+/**
+ * @ingroup uart_top
+ * @{
+ */
 /**
  * @brief   Initialize and enable UART module.
  * @param   uart        Pointer to the UART registers.
@@ -151,6 +152,13 @@ int UART_Init(mxc_uart_regs_t *uart, const uart_cfg_t *cfg, const sys_cfg_uart_t
  *             unsuccessful.
  */
 int UART_Shutdown(mxc_uart_regs_t *uart);
+/**@}*/
+/**
+ * @ingroup uart_top
+ * @defgroup uart_sync UART Synchronous Functions
+ * @brief Synchronous/blocking Functions for the UART peripheral.
+ * @{
+ */
 
 /**
  * @brief      Write UART data. This function blocks until the write transaction
@@ -166,7 +174,6 @@ int UART_Write(mxc_uart_regs_t *uart, uint8_t* data, int len);
 
 /**
  * @brief      Read UART data, <em>blocking</em> until transaction is complete.
- *
  * @param      uart  Pointer to the UART registers.
  * @param      data  Pointer to buffer to save the data read.
  * @param      len   Number of bytes to read.
@@ -179,10 +186,9 @@ int UART_Read(mxc_uart_regs_t *uart, uint8_t* data, int len, int *num);
 int UART_Read2(mxc_uart_regs_t *uart, uint8_t* data, int len, int *num);
 
 /**
- * @ingroup uart_comm
- * @defgroup uart_async UART Asynchronous Functions
+ * @ingroup uart_async
+ * @{
  */
-
 /**
  * @brief      Asynchronously write/transmit data to the UART.
  *
@@ -192,33 +198,24 @@ int UART_Read2(mxc_uart_regs_t *uart, uint8_t* data, int len, int *num);
  *
  * @return     #E_NO_ERROR Asynchronous write successfully started, @ref
  *             MXC_Error_Codes "error" if unsuccessful.
- * @addtogroup uart_async
  */
-
-/* ************************************************************************* */
-
 int UART_WriteAsync(mxc_uart_regs_t *uart, uart_req_t *req);
 
 /**
- * @brief      Asynchronously Read UART data.
- *
+ * Asynchronously Read UART data.
  * @param      uart  Pointer to the UART registers.
  * @param      req   Pointer to request for a UART transaction.
- * @note       Request struct must remain allocated until callback function is called.
- *
+ * 
  * @return     #E_NO_ERROR Asynchronous read successfully started, @ref
  *             MXC_Error_Codes "error" if unsuccessful.
- * @addtogroup uart_async
+ * @note       Request struct must remain allocated until callback function is called.
  */
 int UART_ReadAsync(mxc_uart_regs_t *uart, uart_req_t *req);
 
 /**
- * @brief      Abort asynchronous request.
- *
+ * Abort asynchronous request.
  * @param      req   Pointer to a request for a UART transaction, see #uart_req.
- *
  * @return     #E_NO_ERROR Asynchronous request aborted successfully, error if unsuccessful.
- * @addtogroup uart_async
  */
 int UART_AbortAsync(uart_req_t *req);
 
@@ -231,7 +228,6 @@ int UART_AbortAsync(uart_req_t *req);
  *             using asynchronous functions.
  *
  * @param      uart  Pointer to the UART registers.
- * @addtogroup uart_async
  */
 void UART_Handler(mxc_uart_regs_t *uart);
 
@@ -244,7 +240,11 @@ void UART_Handler(mxc_uart_regs_t *uart);
  * @return     #E_BUSY UART is in use.
  */
 int UART_Busy(mxc_uart_regs_t *uart);
-
+/** @}*/
+/**
+ * @ingroup uart_top
+ * @{
+ */
 /**
  * @brief      Prepare the UART for entry into a Low-Power mode (LP0/LP1).
  * @details    Checks for any ongoing transactions. Disables interrupts if the
@@ -254,14 +254,12 @@ int UART_Busy(mxc_uart_regs_t *uart);
  * @return     #E_NO_ERROR  UART is ready to enter Low-Power modes (LP0/LP1).
  * @return     #E_BUSY      UART is active and busy and not ready to enter a
  *                          Low-Power mode (LP0/LP1).
- *
  */
 int UART_PrepForSleep(mxc_uart_regs_t *uart);
 
 /**
  * @brief      Enables the UART.
  * @note       This function does not change the existing UART configuration.
- *
  * @param      uart  Pointer to the UART registers.
  */
 __STATIC_INLINE void UART_Enable(mxc_uart_regs_t *uart)
@@ -272,7 +270,6 @@ __STATIC_INLINE void UART_Enable(mxc_uart_regs_t *uart)
 
 /**
  * @brief      Drains/empties and data in the RX FIFO.
- *
  * @param      uart  Pointer to the UART registers.
  */
 __STATIC_INLINE void UART_DrainRX(mxc_uart_regs_t *uart)
@@ -284,7 +281,6 @@ __STATIC_INLINE void UART_DrainRX(mxc_uart_regs_t *uart)
 
 /**
  * @brief      Drains/empties any data in the TX FIFO.
- *
  * @param      uart  Pointer to the UART registers.
  */
 __STATIC_INLINE void UART_DrainTX(mxc_uart_regs_t *uart)
@@ -296,9 +292,7 @@ __STATIC_INLINE void UART_DrainTX(mxc_uart_regs_t *uart)
 
 /**
  * @brief      Returns the number of unused bytes available in the UART TX FIFO.
- *
  * @param      uart  Pointer to the UART registers.
- *
  * @return     Number of unused bytes in the TX FIFO.
  */
 __STATIC_INLINE unsigned UART_NumWriteAvail(mxc_uart_regs_t *uart)
@@ -309,9 +303,7 @@ __STATIC_INLINE unsigned UART_NumWriteAvail(mxc_uart_regs_t *uart)
 /**
  * @brief      Returns the number of bytes available to be read from the RX
  *             FIFO.
- *
  * @param      uart  Pointer to the UART registers.
- *
  * @return     The number of bytes available to read in the RX FIFO.
  */
 __STATIC_INLINE unsigned UART_NumReadAvail(mxc_uart_regs_t *uart)
@@ -321,10 +313,8 @@ __STATIC_INLINE unsigned UART_NumReadAvail(mxc_uart_regs_t *uart)
 
 /**
  * @brief      Clear interrupt flags.
- *
  * @param      uart  Pointer to the UART registers.
- * @param      mask  Mask of the UART interrupts to clear, see
- *                   @ref UART_INTFL_Register Register.
+ * @param      mask  Mask of the UART interrupts to clear, see @ref UART_INTFL_Register Register.
  */
 __STATIC_INLINE void UART_ClearFlags(mxc_uart_regs_t *uart, uint32_t mask)
 {
@@ -333,17 +323,14 @@ __STATIC_INLINE void UART_ClearFlags(mxc_uart_regs_t *uart, uint32_t mask)
 
 /**
  * @brief      Get interrupt flags.
- *
  * @param      uart  Pointer to the UART registers.
- *
  * @return     Mask of active flags.
  */
 __STATIC_INLINE unsigned UART_GetFlags(mxc_uart_regs_t *uart)
 {
     return (uart->intfl);
 }
-
-/**@} end of group uart_comm */
+/** @} */
 #ifdef __cplusplus
 }
 #endif

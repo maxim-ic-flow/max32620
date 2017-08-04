@@ -1,4 +1,8 @@
-/*******************************************************************************
+/**
+ * @file
+ * @brief    Exclusive access lock utility functions.
+*/
+/* ****************************************************************************
  * Copyright (C) 2016 Maxim Integrated Products, Inc., All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
@@ -29,20 +33,51 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-03-11 10:46:02 -0700 (Fri, 11 Mar 2016) $
- * $Revision: 21838 $
+ * $Date: 2017-02-14 18:16:40 -0600 (Tue, 14 Feb 2017) $
+ * $Revision: 26426 $
  *
- ******************************************************************************/
+ *************************************************************************** */
 
-extern void SystemInit(void);
-extern void $Super$$main(void);
+/* Define to prevent redundant inclusion */
+#ifndef _MXC_LOCK_H_
+#define _MXC_LOCK_H_
 
-// This will be executed after the RAM initialization
-void $Sub$$main(void)
+/* **** Includes **** */
+#include "mxc_config.h"
+#include "mxc_lock.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/* ************************************************************************** */
+int mxc_get_lock(uint32_t *lock, uint32_t value)
 {
+    do {
 
-    SystemInit();
+        // Return if the lock is taken by a different thread
+        if(__LDREXW((volatile unsigned long *)lock) != 0) {
+            return E_BUSY;
+        }
 
-    // Call to main function
-    $Super$$main();
+        // Attempt to take the lock
+    } while(__STREXW(value, (volatile unsigned long *)lock) != 0);
+
+    // Do not start any other memory access until memory barrier is complete
+    __DMB();
+
+    return E_NO_ERROR;
 }
+
+/* ************************************************************************** */
+void mxc_free_lock(uint32_t *lock)
+{
+    // Ensure memory operations complete before releasing lock
+    __DMB();
+    *lock = 0;
+}
+
+#ifdef __cplusplus
+}
+#endif
+#endif /* _MXC_LOCK_H_ */
