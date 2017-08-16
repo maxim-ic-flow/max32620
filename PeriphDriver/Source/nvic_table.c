@@ -29,8 +29,8 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-11-29 14:42:38 -0600 (Tue, 29 Nov 2016) $
- * $Revision: 25289 $
+ * $Date: 2017-02-28 10:23:39 -0600 (Tue, 28 Feb 2017) $
+ * $Revision: 26731 $
  *
  ******************************************************************************/
 
@@ -40,10 +40,8 @@
 
 /* RAM vector_table needs to be aligned with the size of the vector table */
 #if defined ( __ICCARM__ )
-#pragma data_alignment = 256
 #define __isr_vector __vector_table
-#elif defined ( __CC_ARM)
-#define __isr_vector __Vectors /* handle Keil/ARMCC startup */
+#pragma data_alignment = 256
 #else
 __attribute__ ((aligned (256)))
 #endif

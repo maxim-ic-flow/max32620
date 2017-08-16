@@ -1,7 +1,7 @@
 /**
  * @file
- * @brief      This file contains the function implementations for the UART
- *             serial communications peripheral module.
+ * @brief      Function implementations for the UART serial communications
+ *             peripheral module.
  */
 /* *****************************************************************************
  * Copyright (C) 2016 Maxim Integrated Products, Inc., All Rights Reserved.
@@ -34,8 +34,8 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-09-08 17:00:36 -0500 (Thu, 08 Sep 2016) $
- * $Revision: 24319 $
+ * $Date: 2017-02-16 08:57:56 -0600 (Thu, 16 Feb 2017) $
+ * $Revision: 26458 $
  *
  **************************************************************************** */
 
@@ -47,10 +47,8 @@
 #include "mxc_sys.h"
 #include "uart.h"
  
-/**
- * @ingroup uart_comm
- * @{
- */
+
+
 /* **** Definitions **** */
 ///@cond
 #define UART_ERRORS             (MXC_F_UART_INTEN_RX_FIFO_OVERFLOW  | \
@@ -67,17 +65,40 @@
 
 #define UART_RXFIFO_USABLE     (MXC_UART_FIFO_DEPTH-3)
 ///@endcond
-//
+
+/**
+ * @ingroup uart_top
+ * @{
+ */
 /* **** Globals **** */
 
-// Saves the state of the non-blocking read requests
+/**
+ * Saves the state of the non-blocking/asynchronous read requests
+ */
 static uart_req_t *rx_states[MXC_CFG_UART_INSTANCES];
 
-// Saves the state of the non-blocking write requests
+/**
+ * Saves the state of the non-blocking/asynchronous write requests
+ */
 static uart_req_t *tx_states[MXC_CFG_UART_INSTANCES];
 
 /* **** Functions **** */
+/**
+ * @brief      Asynchronous low-level handler for UART writes. 
+ *
+ * @param      uart      Pointer to the UART registers structure for the port being written.
+ * @param      req       Pointer to the request structure containing the data left to be written.
+ * @param[in]  uart_num  The UART number
+ */
 static void UART_WriteHandler(mxc_uart_regs_t *uart, uart_req_t *req, int uart_num);
+/**
+ * @brief      Asynchronous low-level hander for UART reads. 
+ *
+ * @param      uart      Pointer to the UART registers structure for the port being read.
+ * @param      req       Pointer to the request structure containing the data storage for the read.
+ * @param[in]  uart_num  The UART number
+ * @param[in]  flags     The UART interrupt flags for error detection and handling. 
+ */
 static void UART_ReadHandler(mxc_uart_regs_t *uart, uart_req_t *req, int uart_num, 
     uint32_t flags);
 
@@ -734,4 +755,4 @@ static void UART_ReadHandler(mxc_uart_regs_t *uart, uart_req_t *req, int uart_nu
         uart->inten |= (MXC_F_UART_INTEN_RX_FIFO_AF | UART_ERRORS);
     }
 }
-/**@} end of ingroup uart_comm */
+/** @} */

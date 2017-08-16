@@ -1,5 +1,5 @@
 /**
- * @file     
+ * @file
  * @brief    Exclusive access lock utility functions.
 */
 /* ****************************************************************************
@@ -33,8 +33,8 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-10-10 19:16:20 -0500 (Mon, 10 Oct 2016) $
- * $Revision: 24663 $
+ * $Date: 2017-02-27 14:38:42 -0600 (Mon, 27 Feb 2017) $
+ * $Revision: 26655 $
  *
  *************************************************************************** */
 
@@ -42,7 +42,7 @@
 #ifndef _MXC_LOCK_H_
 #define _MXC_LOCK_H_
 
-/***** Includes *****/
+/* **** Includes **** */
 #include "mxc_config.h"
 
 #ifdef __cplusplus
@@ -50,13 +50,13 @@ extern "C" {
 #endif
 
 /**
- * @ingroup    sysconfig
- * @defgroup   mxc_lock_utilities Lock functions for Exclusive Access
+ * @ingroup    syscfg
+ * @defgroup   mxc_lock_utilities Exclusive Access Locks
  * @brief      Lock functions to obtain and release a variable for exclusive
  *             access. These functions are marked interrupt safe if they are
- *             interrupt safe. 
+ *             interrupt safe.
  * @{
- */ 
+ */
 
 /* **** Definitions **** */
 
@@ -75,35 +75,14 @@ extern "C" {
  *
  * @return     #E_NO_ERROR if everything successful, #E_BUSY if lock is taken.
  */
-__STATIC_INLINE int mxc_get_lock(uint32_t *lock, uint32_t value)
-{
-    do {
-
-        // Return if the lock is taken by a different thread
-        if(__LDREXW((volatile unsigned long *)lock) != 0) {
-            return E_BUSY;
-        }
-
-        // Attempt to take the lock
-    } while(__STREXW(value, (volatile unsigned long *)lock) != 0);
-
-    // Do not start any other memory access until memory barrier is complete
-    __DMB();
-
-    return E_NO_ERROR;
-}
+int mxc_get_lock(uint32_t *lock, uint32_t value);
 
 /**
  * @brief         Free the given lock.
  * @param[in,out] lock  Pointer to the variable used for the lock. When the lock
  *                      is free, the value pointed to by @p lock is set to zero.
  */
-__STATIC_INLINE void mxc_free_lock(uint32_t *lock)
-{
-    // Ensure memory operations complete before releasing lock
-    __DMB();
-    *lock = 0;
-}
+void mxc_free_lock(uint32_t *lock);
 
 /**@} end of group mxc_lock_utilities */
 

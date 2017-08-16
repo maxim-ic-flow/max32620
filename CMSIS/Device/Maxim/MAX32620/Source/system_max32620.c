@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2016 Maxim Integrated Products, Inc., All Rights Reserved.
+ * Copyright (C) 2017 Maxim Integrated Products, Inc., All Rights Reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -194,13 +194,14 @@ __weak void SystemInit(void)
 {
     /* Configure the interrupt controller to use the application vector table in */
     /* the application space */
-#if defined ( __CC_ARM) || defined ( __GNUC__) 
-    /* IAR sets the VTOR pointer prior to SystemInit and setting it here causes stack corruption on IAR startup. */
-	  __disable_irq();
-    SCB->VTOR = (uint32_t)__isr_vector;
-	__DSB();
-	__enable_irq();	
-#endif /* __CC_ARM || __GNUC__ */
+#if defined ( __GNUC__) 
+    /* IAR sets the VTOR pointer prior to SystemInit and causes stack corruption to change it here. */
+    __disable_irq(); /* Disable interrupts */
+    SCB->VTOR = (uint32_t)__isr_vector; /* set the Vector Table to point at our ISR table */
+    __DSB();                        /* bus sync */
+    __enable_irq();                 /* enable interrupts */
+#endif /* __GNUC__ */
+
     /* Copy trim information from shadow registers into power manager registers */
     /* NOTE: Checks have been added to prevent bad/missing trim values from being loaded */
     if ((MXC_FLC->ctrl & MXC_F_FLC_CTRL_INFO_BLOCK_VALID) &&
@@ -287,9 +288,21 @@ __weak void SystemInit(void)
     /* Perform an initial trim of the internal ring oscillator */
     CLKMAN_TrimRO();
 
+#if !defined (__CC_ARM) // Prevent Keil tools from calling these functions until post scatter load
     SystemCoreClockUpdate();
-
-#if defined (__GNUC__) && !defined (__CC_ARM)
     Board_Init();
-#endif
+#endif /* ! __CC_ARM */
 }
+
+#if defined ( __CC_ARM )
+/* Function called post memory initialization in the Keil Toolchain, which
+ * we are using to call the system core clock upddate and board initialization
+ * to prevent data corruption if they are called from SystemInit. */
+extern void $Super$$__main_after_scatterload(void);
+void $Sub$$__main_after_scatterload(void)
+{
+    SystemCoreClockUpdate();
+    Board_Init();
+    $Super$$__main_after_scatterload();
+}
+#endif /* __CC_ARM */

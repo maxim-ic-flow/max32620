@@ -33,8 +33,8 @@
  * property whatsoever. Maxim Integrated Products, Inc. retains all
  * ownership rights.
  *
- * $Date: 2016-09-08 17:42:39 -0500 (Thu, 08 Sep 2016) $
- * $Revision: 24325 $
+ * $Date: 2017-06-02 09:15:07 -0500 (Fri, 02 Jun 2017) $
+ * $Revision: 28320 $
  **************************************************************************** */
 
 /* **** Includes **** */
@@ -79,7 +79,7 @@ int SPIS_Init(mxc_spis_regs_t *spis, uint8_t mode, const sys_cfg_spis_t *sys_cfg
     // Drain the FIFOs, enable SPIS
     spis->gen_ctrl = 0;
     spis->gen_ctrl = (MXC_F_SPIS_GEN_CTRL_SPI_SLAVE_EN | MXC_F_SPIS_GEN_CTRL_TX_FIFO_EN |
-        MXC_F_SPIS_GEN_CTRL_RX_FIFO_EN);
+        MXC_F_SPIS_GEN_CTRL_RX_FIFO_EN | ((mode << MXC_F_SPIS_GEN_CTRL_SPI_MODE_POS) & MXC_F_SPIS_GEN_CTRL_SPI_MODE));
 
     // Set the TX FIFO almost empty level
     spis->fifo_ctrl = ((spis->fifo_ctrl & ~MXC_F_SPIS_FIFO_CTRL_TX_FIFO_AE_LVL) |

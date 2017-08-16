@@ -289,11 +289,11 @@ Reset_Handler:
     def_irq_handler TMR16_4_IRQHandler        /* 47:32 Timer16-s4 */
     def_irq_handler TMR5_IRQHandler           /* 48:33 Timer32-5 */
     def_irq_handler TMR16_5_IRQHandler        /* 49:34 Timer16-s5 */
-    def_irq_handler PT_IRQHandler             /* 50:35 PT */
-    def_irq_handler UART0_IRQHandler          /* 51:36 UART0 */
-    def_irq_handler UART1_IRQHandler          /* 52:37 UART1 */
-    def_irq_handler UART2_IRQHandler          /* 53:38 UART0 */
-    def_irq_handler UART3_IRQHandler          /* 54:39 UART1 */
+    def_irq_handler UART0_IRQHandler          /* 50:35 UART0 */
+    def_irq_handler UART1_IRQHandler          /* 51:36 UART1 */
+    def_irq_handler UART2_IRQHandler          /* 52:37 UART0 */
+    def_irq_handler UART3_IRQHandler          /* 53:38 UART1 */
+    def_irq_handler PT_IRQHandler             /* 54:39 PT */
     def_irq_handler I2CM0_IRQHandler          /* 55:40 I2C Master 0 */
     def_irq_handler I2CM1_IRQHandler          /* 56:41 I2C Master 1 */
     def_irq_handler I2CM2_IRQHandler          /* 57:42 I2C Master 2 */
